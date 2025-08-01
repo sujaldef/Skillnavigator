@@ -27,7 +27,7 @@ const Study = () => {
   const location = useLocation();
   const { jobRole, level, fieldName } = location.state || { jobRole: "", level: "", fieldName: "" };
 
-  const apiKey = "AIzaSyDUOZunebNGQMazQoQCPycKHeHhdYDQEc0";
+const apiKey = import.meta.env.VITE_OPENAI_API_KEY;
 
   const handleTakeTestClick = (skill) => {
     navigate(`/quiz/${skill}`, {

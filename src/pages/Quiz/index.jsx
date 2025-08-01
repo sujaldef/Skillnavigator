@@ -13,7 +13,8 @@ const Quiz = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { jobRole, level, fieldName } = location.state || { jobRole: "", level: "", fieldName: "" };
-  const apiKey = "AIzaSyDUOZunebNGQMazQoQCPycKHeHhdYDQEc0";
+const apiKey = import.meta.env.VITE_OPENAI_API_KEY;
+
   const [showPopup, setShowPopup] = useState(false);
 
   useEffect(() => {
