@@ -13,7 +13,8 @@ const Quiz = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { jobRole, level, fieldName } = location.state || { jobRole: "", level: "", fieldName: "" };
-const apiKey = import.meta.env.VITE_OPENAI_API_KEY;
+const apiKey = import.meta.env.VITE_GOOGLE_API_KEY;
+
 
   const [showPopup, setShowPopup] = useState(false);
 
@@ -54,7 +55,8 @@ const apiKey = import.meta.env.VITE_OPENAI_API_KEY;
         }`;
 
         const response = await fetch(
-          `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`,
+  `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`
+,
           {
             method: "POST",
             headers: { "Content-Type": "application/json" },

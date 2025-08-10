@@ -25,9 +25,18 @@ const Study = () => {
 
   const navigate = useNavigate();
   const location = useLocation();
-  const { jobRole, level, fieldName } = location.state || { jobRole: "", level: "", fieldName: "" };
+  const { jobRole, level, fieldName } = location.state || {
+    jobRole: "",
+    level: "",
+    fieldName: "",
+  };
 
-const apiKey = import.meta.env.VITE_OPENAI_API_KEY;
+  const apiKey = import.meta.env.VITE_GOOGLE_API_KEY;
+  if (!apiKey) {
+    console.error(
+      "❌ Google API key is missing. Check your .env file and restart the dev server."
+    );
+  }
 
   const handleTakeTestClick = (skill) => {
     navigate(`/quiz/${skill}`, {
@@ -36,8 +45,20 @@ const apiKey = import.meta.env.VITE_OPENAI_API_KEY;
   };
 
   const calculateProgress = (segmentation, level) => {
-    const levelOrder = ["Novice", "Beginner", "Intermediate", "Advanced", "Expert"];
-    const segmentOrder = ["Invoice Level", "Beginner Level", "Intermediate Level", "Advanced Level", "Expert Level"];
+    const levelOrder = [
+      "Novice",
+      "Beginner",
+      "Intermediate",
+      "Advanced",
+      "Expert",
+    ];
+    const segmentOrder = [
+      "Invoice Level",
+      "Beginner Level",
+      "Intermediate Level",
+      "Advanced Level",
+      "Expert Level",
+    ];
     const levelIndex = levelOrder.indexOf(level);
     const segmentIndex = segmentOrder.indexOf(segmentation);
 
@@ -86,14 +107,19 @@ const apiKey = import.meta.env.VITE_OPENAI_API_KEY;
     try {
       const result = await axios.post(
         `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`,
+
         { contents: [{ parts: [{ text: input }] }] },
         { headers: { "Content-Type": "application/json" } }
       );
 
-      const apiResponse = result.data?.candidates?.[0]?.content?.parts?.[0]?.text || "No response received.";
+      const apiResponse =
+        result.data?.candidates?.[0]?.content?.parts?.[0]?.text ||
+        "No response received.";
       setResponse(apiResponse);
     } catch (error) {
-      setResponse("Error fetching response. Please check the input or API key.");
+      setResponse(
+        "Error fetching response. Please check the input or API key."
+      );
       console.error("API Error:", error);
     } finally {
       setAskAiLoading(false);
@@ -124,13 +150,20 @@ const apiKey = import.meta.env.VITE_OPENAI_API_KEY;
 
     try {
       const result = await axios.post(
-        `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`,
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`
+,
         { contents: [{ parts: [{ text: prompts[tab] }] }] },
         { headers: { "Content-Type": "application/json" } }
       );
 
-      const apiResponse = result.data?.candidates?.[0]?.content?.parts?.[0]?.text || "No response received.";
-      setStudyMaterial(typeof apiResponse === "object" ? JSON.stringify(apiResponse, null, 2) : apiResponse);
+      const apiResponse =
+        result.data?.candidates?.[0]?.content?.parts?.[0]?.text ||
+        "No response received.";
+      setStudyMaterial(
+        typeof apiResponse === "object"
+          ? JSON.stringify(apiResponse, null, 2)
+          : apiResponse
+      );
     } catch (error) {
       setStudyMaterial("Error fetching content. Please try again.");
       console.error("API Error:", error);
