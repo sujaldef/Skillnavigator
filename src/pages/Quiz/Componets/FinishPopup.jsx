@@ -1,39 +1,55 @@
 import React from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { FaExclamationTriangle } from "react-icons/fa";
 
-const FinishPopup = ({ show, onConfirm, onCancel, questions, answers }) => {
+const FinishPopup = ({ show, onConfirm, onCancel, answeredCount, totalCount }) => {
   if (!show) return null;
 
-  const remainingQuestions = questions.length - Object.keys(answers).length;
-  const noAnswers = Object.keys(answers).length === 0;
+  const remaining = totalCount - answeredCount;
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-60 z-[1100]">
-      <div className="bg-[#D9D9D9] p-8 rounded-xl shadow-2xl text-center max-w-md w-full">
-        <h2 className="text-2xl font-bold text-[#1A2A44] mb-4">Quiz Completion</h2>
-        {noAnswers ? (
-          <p className="mb-4 text-red-600 font-semibold">
-            You haven’t answered any questions. Finishing now will submit a score of 0. Proceed?
+    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
+      {/* Backdrop */}
+      <div className="absolute inset-0 bg-black/80 backdrop-blur-sm" onClick={onCancel} />
+
+      {/* Modal */}
+      <motion.div 
+        initial={{ scale: 0.9, opacity: 0 }}
+        animate={{ scale: 1, opacity: 1 }}
+        className="relative bg-[#1A2A44] border border-[#2E4057] rounded-3xl p-8 max-w-md w-full text-center shadow-2xl"
+      >
+        <div className="w-16 h-16 bg-blue-500/10 rounded-full flex items-center justify-center text-blue-400 mx-auto mb-6">
+           <FaExclamationTriangle size={32} />
+        </div>
+
+        <h2 className="text-2xl font-bold text-white mb-2">Finish Exam?</h2>
+        
+        {remaining > 0 ? (
+          <p className="text-gray-400 mb-8">
+            You have <span className="text-[#00FF88] font-bold">{remaining}</span> unanswered questions. 
+            Unanswered questions will be marked as incorrect.
           </p>
         ) : (
-          <p className="mb-4 text-[#1A2A44]">
-            You have {remainingQuestions} question{remainingQuestions !== 1 ? "s" : ""} remaining. Do you want to finish?
+          <p className="text-gray-400 mb-8">
+            You have answered all questions. Ready to submit?
           </p>
         )}
-        <div className="flex justify-center gap-4">
-          <button
-            onClick={onConfirm}
-            className="bg-red-500 text-white px-6 py-2 rounded-md hover:bg-red-600 transition-colors duration-200"
-          >
-            Finish
-          </button>
+
+        <div className="flex gap-4">
           <button
             onClick={onCancel}
-            className="bg-[#697A9B] text-white px-6 py-2 rounded-md hover:bg-[#5A6B8A] transition-colors duration-200"
+            className="flex-1 py-3 rounded-xl bg-[#0B1221] text-gray-300 font-bold hover:bg-[#1E293B] transition-colors"
           >
-            Back to Quiz
+            Return
+          </button>
+          <button
+            onClick={onConfirm}
+            className="flex-1 py-3 rounded-xl bg-[#00FF88] text-[#0B1221] font-bold hover:bg-[#00CC70] transition-colors"
+          >
+            Submit Exam
           </button>
         </div>
-      </div>
+      </motion.div>
     </div>
   );
 };
