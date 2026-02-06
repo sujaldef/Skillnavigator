@@ -1,38 +1,65 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { Link, useLocation } from 'react-router-dom';
+import { motion, AnimatePresence } from 'framer-motion';
 
 const Navbar = () => {
-  return (
-    <nav className="fixed bg-[#182c4d] shadow-lg h-[70px] w-full  z-[1000] ">
-      <div className="w-full">
-        <div className="flex justify-between">
-          {/* Logo Section */}
-          <div className="w-[30%] font-bold text-[#00FF88] pl-3 text-[24px] font-montserrat text-2xl p-1">
-            <div className="block">SKILL</div>
-            <div className="block">NAVIGATOR.</div>
-          </div>
+  const location = useLocation();
+  const [scrolled, setScrolled] = useState(false);
 
-          {/* Links Section */}
-          <div className="w-[70%] flex justify-between pr-10 pt-9 text-[#FFFFFF] text-[16px] font-montserrat">
-            <Link to="/" className="transition duration-300">
-              HOME
+  // Handle scroll effect for glassmorphism
+  useEffect(() => {
+    const handleScroll = () => setScrolled(window.scrollY > 20);
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  const navLinks = [
+    { name: 'HOME', path: '/' },
+    { name: 'PROGRAMS', path: '/program' },
+    { name: 'CAREER', path: '/career' },
+    { name: 'ABOUT', path: '/about' },
+    { name: 'DASHBOARD', path: '/dashboard' },
+  ];
+
+  return (
+    <motion.nav
+      initial={{ y: -100 }}
+      animate={{ y: 0 }}
+      className={`fixed top-0 w-full z-[1000] transition-all duration-300 ${
+        scrolled ? 'bg-[#182c4d]/90 backdrop-blur-md shadow-lg py-2' : 'bg-transparent py-4'
+      }`}
+    >
+      <div className="max-w-7xl mx-auto px-6 flex justify-between items-center">
+        {/* Logo */}
+        <Link to="/" className="group flex flex-col font-montserrat font-bold text-2xl">
+          <span className="text-white group-hover:text-[#00FF88] transition-colors duration-300">
+            SKILL
+          </span>
+          <span className="text-[#00FF88] text-lg -mt-1 tracking-widest group-hover:tracking-[0.2em] transition-all duration-300">
+            NAVIGATOR.
+          </span>
+        </Link>
+
+        {/* Links */}
+        <div className="hidden md:flex space-x-8">
+          {navLinks.map((link) => (
+            <Link
+              key={link.name}
+              to={link.path}
+              className="relative text-white font-medium text-sm tracking-wide hover:text-[#00FF88] transition-colors duration-300 py-2"
+            >
+              {link.name}
+              {location.pathname === link.path && (
+                <motion.div
+                  layoutId="underline"
+                  className="absolute left-0 bottom-0 w-full h-[2px] bg-[#00FF88]"
+                />
+              )}
             </Link>
-            <Link to="/program" className="transition duration-300">
-              PROGRAMS
-            </Link>
-            <Link to="/career" className="transition duration-300">
-              CAREER
-            </Link>
-            <Link to="/about" className="transition duration-300">
-              ABOUT
-            </Link>
-            <Link to="/dashboard" className="transition duration-300">
-              DASHBOARD
-            </Link>
-          </div>
+          ))}
         </div>
       </div>
-    </nav>
+    </motion.nav>
   );
 };
 
