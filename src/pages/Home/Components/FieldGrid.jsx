@@ -80,7 +80,7 @@ const FieldGrid = ({ onFieldClick }) => {
           </AnimatePresence>
         </motion.div>
         
-        {/* Toggle Button - Hide if searching or if list is short */}
+        {/* Toggle Button - Hide searching or if list is short */}
         {filteredEntries.length > 8 && !searchTerm && (
           <div className="flex justify-center mt-8">
             <button
