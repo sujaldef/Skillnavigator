@@ -1,59 +1,98 @@
 import { motion } from "framer-motion";
 import Navbar from '../../components/Navbar';
 import Footer from '../../components/Footer';
-import { BrowserRouter as Router, Routes, Route, useNavigate,  Link } from "react-router-dom";
+
 const Program = () => {
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: { opacity: 1, transition: { staggerChildren: 0.2 } },
+  };
+
+  const cardVariants = {
+    hidden: { opacity: 0, y: 30 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.6 } },
+  };
+
   return (
-    <div className="min-h-screen  bg-[#1A2A44] font-montserrat">
-        <Navbar />
-    <div className="min-h-screen bg-[#1A2A44] text-white pt-[10%] py-16 px-8 md:px-16 lg:px-32">
-      <motion.h1
-        className="text-4xl md:text-5xl font-bold text-center mb-8"
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6 }}
+    <div className="min-h-screen bg-[#1A2A44] font-montserrat flex flex-col">
+      <Navbar />
+      
+      {/* Decorative Background Blob */}
+      <div className="fixed top-20 left-0 w-[500px] h-[500px] bg-[#00FF88]/5 rounded-full blur-[120px] pointer-events-none" />
+
+      <motion.div 
+        variants={containerVariants}
+        initial="hidden"
+        animate="visible"
+        className="flex-grow text-white pt-[120px] pb-16 px-6 md:px-16 lg:px-32 relative z-10"
       >
-        Our Programs
-      </motion.h1>
+        <div className="text-center mb-16">
+          <motion.h1 className="text-4xl md:text-6xl font-bold mb-6 tracking-tight">
+            Our <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#00FF88] to-emerald-500">Programs</span>
+          </motion.h1>
 
-      <motion.p
-        className="text-lg text-gray-300 text-center max-w-3xl mx-auto"
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8 }}
-      >
-        Explore our structured programs designed to upskill individuals across various domains and expertise levels.
-      </motion.p>
+          <motion.p className="text-lg text-gray-300 max-w-2xl mx-auto leading-relaxed">
+            Curated learning paths designed to take you from novice to expert. Choose your difficulty level and start building.
+          </motion.p>
+        </div>
 
-      <div className="mt-12 grid md:grid-cols-2 gap-8">
-        <motion.div
-          className="bg-gray-800 p-6 rounded-lg shadow-lg"
-          whileHover={{ scale: 1.05 }}
-        >
-          <div className="flex justify-center ">
-            <img src="/begginerlvl.jpg" alt="" className="w-[60%] h-[60%]  rounded-[45px] mb-6   " />
-          </div>
-          <h2 className="text-2xl font-semibold mb-3">📖 Beginner Programs</h2>
-          <p className="text-gray-400">
-            Get started with foundational skills and step into the tech world with confidence.
-          </p>
-        </motion.div>
+        <div className="grid md:grid-cols-2 gap-8 max-w-6xl mx-auto">
+          {/* Beginner Card */}
+          <motion.div
+            variants={cardVariants}
+            whileHover={{ y: -10, boxShadow: "0px 10px 30px -10px rgba(0, 255, 136, 0.3)" }}
+            className="group bg-[#233554]/80 backdrop-blur-md border border-[#2E4057] p-8 rounded-[30px] transition-all duration-300"
+          >
+            <div className="h-64 overflow-hidden rounded-[20px] mb-6 relative">
+               <div className="absolute inset-0 bg-gradient-to-t from-[#1A2A44] to-transparent opacity-60 z-10" />
+               <img 
+                 src="/begginerlvl.jpg" 
+                 alt="Beginner" 
+                 className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700" 
+               />
+               <div className="absolute bottom-4 left-4 z-20 bg-[#00FF88] text-[#1A2A44] text-xs font-bold px-3 py-1 rounded-full uppercase">
+                 Entry Level
+               </div>
+            </div>
+            
+            <h2 className="text-3xl font-bold mb-3 group-hover:text-[#00FF88] transition-colors">📖 Beginner Programs</h2>
+            <p className="text-gray-400 leading-relaxed mb-6">
+              Get started with foundational skills. Perfect for those taking their first step into the tech world.
+            </p>
+            <button className="w-full py-3 rounded-xl border border-[#00FF88] text-[#00FF88] font-bold hover:bg-[#00FF88] hover:text-[#1A2A44] transition-all">
+              Start Basics
+            </button>
+          </motion.div>
 
-        <motion.div
-          className="bg-gray-800 p-6 rounded-lg shadow-lg"
-          whileHover={{ scale: 1.05 }}
-        >
-          <div className="flex justify-center ">
-            <img src="/expertlvl.jpg" alt="" className="w-[60%] h-[60%]    rounded-[45px] mb-6 " />
-          </div>
-          <h2 className="text-2xl font-semibold mb-3">🎓 Advanced Learning</h2>
-          <p className="text-gray-400">
-            Enhance your expertise with specialized training programs tailored for professionals.
-          </p>
-        </motion.div>
-      </div>
-    </div>
-    <Footer />
+          {/* Expert Card */}
+          <motion.div
+            variants={cardVariants}
+            whileHover={{ y: -10, boxShadow: "0px 10px 30px -10px rgba(59, 130, 246, 0.3)" }}
+            className="group bg-[#233554]/80 backdrop-blur-md border border-[#2E4057] p-8 rounded-[30px] transition-all duration-300"
+          >
+            <div className="h-64 overflow-hidden rounded-[20px] mb-6 relative">
+               <div className="absolute inset-0 bg-gradient-to-t from-[#1A2A44] to-transparent opacity-60 z-10" />
+               <img 
+                 src="/expertlvl.jpg" 
+                 alt="Expert" 
+                 className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700" 
+               />
+               <div className="absolute bottom-4 left-4 z-20 bg-blue-500 text-white text-xs font-bold px-3 py-1 rounded-full uppercase">
+                 Professional
+               </div>
+            </div>
+            
+            <h2 className="text-3xl font-bold mb-3 group-hover:text-blue-400 transition-colors">🎓 Advanced Learning</h2>
+            <p className="text-gray-400 leading-relaxed mb-6">
+              Deep dive into complex topics. Enhancement programs tailored for experienced professionals.
+            </p>
+            <button className="w-full py-3 rounded-xl border border-blue-500 text-blue-400 font-bold hover:bg-blue-500 hover:text-white transition-all">
+              Go Advanced
+            </button>
+          </motion.div>
+        </div>
+      </motion.div>
+      <Footer />
     </div>
   );
 };
