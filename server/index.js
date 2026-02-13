@@ -42,7 +42,7 @@ app.post("/generate", async (req, res) => {
         raw: data
       });
     }
-    
+     {/* */}
     res.json({ text: data.choices[0].message.content });
     
 

@@ -62,7 +62,7 @@ const HeroSection = () => {
             alt="Learning Setup"
             className="w-full max-w-[500px] rounded-3xl shadow-2xl border-2 border-[#2E4057]"
           />
-          {/* Decorative Elements behind image */}
+          {/* Decorative Elemets behind image */}
           <div className="absolute -z-10 top-10 right-10 w-full h-full border-2 border-[#00FF88] rounded-3xl opacity-20 transform translate-x-4 translate-y-4" />
         </motion.div>
       </div>

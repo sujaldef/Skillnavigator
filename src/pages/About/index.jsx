@@ -1,173 +1,154 @@
-import { motion } from "framer-motion";
+import React, { useRef } from "react";
+import { motion, useMotionTemplate, useMotionValue, useSpring } from "framer-motion";
 import Navbar from '../../components/Navbar';
 import Footer from '../../components/Footer';
-import {
-  BrowserRouter as Router,
-  Routes,
-  Route,
-  useNavigate,
-  Link,
-} from "react-router-dom";
+import { FaTwitter, FaLinkedin, FaGithub, FaEnvelope } from 'react-icons/fa';
+import { BiTargetLock, BiChip, BiData, BiNetworkChart } from 'react-icons/bi';
+
 const About = () => {
   return (
-    <div className="min-h-screen  bg-[#1A2A44] font-montserrat">
+    <div className="min-h-screen bg-[#0B1221] font-sans text-white overflow-hidden selection:bg-[#00FF88] selection:text-[#0B1221]">
       <Navbar />
-   
-      <div className=" text-white py-16 px-8 pt-[10%] md:px-16 lg:px-32 overflow-y-auto [&::-webkit-scrollbar]:w-3 
-        [&::-webkit-scrollbar-track]:bg-[#D9D9D9] 
-        [&::-webkit-scrollbar-thumb]:bg-[#00FF88] 
-        [&::-webkit-scrollbar-thumb]:rounded-full 
-        [&::-webkit-scrollbar-thumb]:hover:bg-[#00cc70] h-[100%]">
-        <motion.h1
-          className="text-4xl md:text-5xl font-bold text-center mb-8"
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-        >
-          About SkillNavigator
-        </motion.h1>
 
-        <motion.p
-          className="text-lg text-gray-300 text-center max-w-3xl mx-auto"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-        >
-          SkillNavigator is an intelligent skill assessment and learning
-          platform designed to help individuals identify their strengths and
-          weaknesses, personalize their learning journey, and track progress
-          effectively.
-        </motion.p>
-
-        <div className="mt-12 grid md:grid-cols-2 gap-8">
-          <motion.div
-            className="bg-gray-800 p-6 rounded-lg shadow-lg"
-            whileHover={{ scale: 1.05 }}
-          >
-            <div className="flex justify-center ">
-            <img src="/personalizeroadmap.jpg" alt="" className="w-[60%] h-[60%]  rounded-[45px] mb-6   " />
-          </div>
-            <h2 className="text-2xl font-semibold mb-3">
-              🎯 Personalized Roadmaps
-            </h2>
-            <p className="text-gray-400">
-              Receive AI-driven recommendations based on your skill level and
-              career goals.
+      <div className="relative pt-32 pb-20 px-6 md:px-12 max-w-7xl mx-auto">
+        
+        {/* Section 1: The Mission (HUD Style) */}
+        <div className="grid lg:grid-cols-2 gap-16 items-center mb-32">
+          <div>
+            <h1 className="text-5xl font-bold mb-6 leading-tight">
+              We Don't Just Teach. <br />
+              <span className="text-[#00FF88]">We Calibrate.</span>
+            </h1>
+            <p className="text-gray-400 text-lg mb-8 leading-relaxed border-l-2 border-[#1E293B] pl-6">
+              SkillNavigator is a precision engine for career development. We strip away the noise and focus on the data points that actually matter for your professional trajectory.
             </p>
-          </motion.div>
-
-          <motion.div
-            className="bg-gray-800 p-6 rounded-lg shadow-lg"
-            whileHover={{ scale: 1.05 }}
-          >
-            <div className="flex justify-center ">
-            <img src="/DynamicSkillTesting.jpg" alt="" className="w-[60%] h-[60%]  rounded-[45px] mb-6   " />
+            
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <FeatureBox icon={<BiTargetLock />} title="Precision Roadmaps" />
+              <FeatureBox icon={<BiChip />} title="Adaptive Testing" />
+              <FeatureBox icon={<BiData />} title="Live Analytics" />
+              <FeatureBox icon={<BiNetworkChart />} title="Role Matching" />
+            </div>
           </div>
-            <h2 className="text-2xl font-semibold mb-3">
-              🧠 Dynamic Skill Testing
-            </h2>
-            <p className="text-gray-400">
-              Take tests to determine your current expertise and receive
-              targeted learning materials.
-            </p>
-          </motion.div>
+
+          {/* Section 2: The Architect (3D Tilt Card) */}
+          <div className="flex justify-center lg:justify-end perspective-1000">
+             <TiltCard />
+          </div>
         </div>
 
-        <div className="mt-8 grid md:grid-cols-2 gap-8">
-          <motion.div
-            className="bg-gray-800 p-6 rounded-lg shadow-lg"
-            whileHover={{ scale: 1.05 }}
-          >
-            <div className="flex justify-center ">
-            <img src="/progresstracking.jpg" alt="" className="w-[60%] h-[60%]  rounded-[45px] mb-6   " />
-          </div>
-            <h2 className="text-2xl font-semibold mb-3">
-              📈 Progress Tracking
-            </h2>
-            <p className="text-gray-400">
-              Monitor your improvements with skill analytics and adaptive
-              learning paths.
-            </p>
-          </motion.div>
-
-          <motion.div
-            className="bg-gray-800 p-6 rounded-lg shadow-lg"
-            whileHover={{ scale: 1.05 }}
-          >
-            <div className="flex justify-center ">
-            <img src="/carreroopo.jpg" alt="" className="w-[60%] h-[60%]  rounded-[45px] mb-6   " />
-          </div>
-            <h2 className="text-2xl font-semibold mb-3">
-              💼 Career Opportunities
-            </h2>
-            <p className="text-gray-400">
-              Connect with top recruiters and upskill for the most in-demand job
-              roles.
-            </p>
-          </motion.div>
-        </div>
-      </div>
-      <div className=" text-center">
-        <motion.h2
-          className="text-4xl font-bold text-white mb-6"
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-        >
-          Meet the Creator
-        </motion.h2>
-
-        <motion.div className="bg-gray-800 p-6 rounded-lg shadow-lg flex flex-col md:flex-row items-center ">
-          <img
-            src="/creator.jpg"
-            alt="Creator"
-            className=" rounded-full h-[300px] mb-4 md:mb-0 md:mr-6 border-4 border-[#00FF88] object-cover"
-          />
-
-          <div className="text-left ml-8 flex flex-col justify-center">
-            <h3 className="text-2xl font-semibold text-white">Sujal Koshta</h3>
-            <p className="text-gray-400">Lead Developer & Architect</p>
-
-            <p className="text-gray-400 mt-2">
-              Passionate about building intelligent skill assessment platforms
-              and personalized learning experiences.
-            </p>
-            <p className="text-gray-400 mt-2 ">
-           sujalkoshtawork@gmail.com || 8109331808
-            </p>
-            <div className="flex gap-6 mt-4">
-        <a
-          href="https://twitter.com/yourusername"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="hover:opacity-80 transition-opacity"
-        >
-          <img src="twitter_icon.png" alt="Twitter" className="h-8 w-8" />
-        </a>
-        <a
-          href="https://www.linkedin.com/in/yourusername"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="hover:opacity-80 transition-opacity"
-        >
-          <img src="linkedin_icon.png" alt="LinkedIn" className="h-8 w-8" />
-        </a>
-        <a
-          href="https://www.instagram.com/yourusername"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="hover:opacity-80 transition-opacity"
-        >
-          <img src="instagram_icon.png" alt="Instagram" className="h-8 w-8" />
-        </a>
-      </div>
-           
-          </div>
-        </motion.div>
       </div>
       <Footer />
     </div>
   );
 };
+
+// --- Sub-Component: HUD Feature Box ---
+const FeatureBox = ({ icon, title }) => (
+  <div className="flex items-center gap-3 p-4 border border-[#1E293B] bg-[#0F172A]/50 rounded-lg hover:border-[#00FF88] transition-colors group">
+    <div className="text-gray-500 group-hover:text-[#00FF88] transition-colors text-xl">
+      {icon}
+    </div>
+    <span className="font-mono text-sm tracking-wide text-gray-300 group-hover:text-white">{title}</span>
+  </div>
+);
+
+// --- The "Crazy" 3D Tilt Card Component ---
+const TiltCard = () => {
+  const ref = useRef(null);
+
+  const x = useMotionValue(0);
+  const y = useMotionValue(0);
+
+  const xSpring = useSpring(x);
+  const ySpring = useSpring(y);
+
+  const transform = useMotionTemplate`rotateX(${xSpring}deg) rotateY(${ySpring}deg)`;
+
+  const handleMouseMove = (e) => {
+    if (!ref.current) return;
+
+    const rect = ref.current.getBoundingClientRect();
+
+    const width = rect.width;
+    const height = rect.height;
+
+    const mouseX = (e.clientX - rect.left) * 32.5;
+    const mouseY = (e.clientY - rect.top) * 32.5;
+
+    const rX = (mouseY / height - 32.5 / 2) * -1;
+    const rY = mouseX / width - 32.5 / 2;
+
+    x.set(rX);
+    y.set(rY);
+  };
+
+  const handleMouseLeave = () => {
+    x.set(0);
+    y.set(0);
+  };
+
+  return (
+    <motion.div
+      ref={ref}
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
+      style={{
+        transformStyle: "preserve-3d",
+        transform,
+      }}
+      className="relative h-[500px] w-[380px] rounded-3xl bg-[#1A2A44]"
+    >
+      <div
+        style={{
+          transform: "translateZ(75px)",
+          transformStyle: "preserve-3d",
+        }}
+        className="absolute inset-4 grid place-content-center rounded-xl bg-[#0B1221] shadow-2xl border border-[#1E293B]"
+      >
+        {/* Creator Image Area */}
+        <div className="relative w-48 h-48 mx-auto mb-6">
+          <div className="absolute inset-0 rounded-full border-2 border-[#00FF88] border-dashed animate-spin-slow opacity-30"></div>
+          <img 
+            src="/creator.jpg" 
+            alt="Creator" 
+            className="w-full h-full object-cover rounded-full border-4 border-[#0B1221] shadow-2xl relative z-10"
+          />
+          <div className="absolute bottom-0 right-0 w-8 h-8 bg-[#00FF88] rounded-full border-4 border-[#0B1221] z-20" />
+        </div>
+
+        {/* Text Content */}
+        <div className="text-center px-8">
+          <h2 className="text-3xl font-bold text-white mb-1">Sujal Koshta</h2>
+          <p className="text-[#00FF88] font-mono text-xs uppercase tracking-[0.2em] mb-6">Lead Architect</p>
+          
+          <div className="flex justify-center gap-4 text-gray-400">
+             <SocialLink href="#" icon={<FaTwitter />} />
+             <SocialLink href="#" icon={<FaLinkedin />} />
+             <SocialLink href="#" icon={<FaGithub />} />
+             <SocialLink href="#" icon={<FaEnvelope />} />
+          </div>
+
+          <div className="mt-8 pt-6 border-t border-[#1E293B]">
+             <p className="text-gray-500 text-xs font-mono">
+               ID: SK-8109331808
+               <br />
+               STATUS: DEPLOYED
+             </p>
+          </div>
+        </div>
+      </div>
+    </motion.div>
+  );
+};
+
+const SocialLink = ({ href, icon }) => (
+  <a 
+    href={href} 
+    className="hover:text-[#00FF88] transition-colors transform hover:scale-110"
+  >
+    {icon}
+  </a>
+);
 
 export default About;
