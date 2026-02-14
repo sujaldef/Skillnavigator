@@ -39,7 +39,7 @@ const Navbar = () => {
           </span>
         </Link>
 
-        {/* Links */}
+        {/* Links*/}
         <div className="hidden md:flex space-x-8">
           {navLinks.map((link) => (
             <Link
