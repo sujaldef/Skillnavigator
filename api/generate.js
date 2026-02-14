@@ -32,9 +32,19 @@ export default async function handler(req, res) {
 
     const data = await response.json();
 
-    res.status(200).json({
-      text: data.choices?.[0]?.message?.content ?? "No response"
+    let text = data?.choices?.[0]?.message?.content || "";
+    
+    // extract JSON safely
+    const match = text.match(/\{[\s\S]*\}/);
+    
+    if (!match) {
+      return res.status(500).json({ error: "No JSON returned from AI" });
+    }
+    
+    return res.status(200).json({
+      json: JSON.parse(match[0])
     });
+    
 
   } catch (e) {
     res.status(500).json({ error: e.message });
