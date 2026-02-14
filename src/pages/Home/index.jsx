@@ -12,7 +12,7 @@ const Home = () => {
   const [expanded, setExpanded] = useState(false);
   const [entries, setEntries] = useState([]);
 
-  useEffect(() => {
+  useEffect(() => { 
     fetch('/jobroleskills.json')
       .then((response) => response.json())
       .then((data) => {

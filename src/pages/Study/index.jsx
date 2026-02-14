@@ -10,7 +10,7 @@ import {
 } from "react-icons/fa";
 import Navbar from "../../components/Navbar"; 
 
-// --- Sub-Component: Loading Spinner ---
+// --- Sub-Component:   Loading Spinner ---
 const BouncingBall = () => (
   <div className="flex justify-center items-center h-full">
     <motion.div

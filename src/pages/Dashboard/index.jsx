@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import Navbar from "../../components/Navbar";
 import { FaChartPie, FaTasks } from "react-icons/fa";
 
-// Slugify helper function
+// Slugify helper functio
 const slugify = (text) =>
   text.toLowerCase().replace(/\s+/g, "-").replace(/[^\w-]+/g, "");
 

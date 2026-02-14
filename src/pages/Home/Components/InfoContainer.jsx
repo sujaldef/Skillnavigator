@@ -107,7 +107,7 @@ const BentoCard = ({ item, index }) => {
              0{index + 1}
            </span>
            
-           {/* Arrow icon that appears on hover */}
+           {/* Arrow icon that  appears on hover */}
            <motion.div 
              initial={{ x: -10, opacity: 0 }}
              whileHover={{ x: 0, opacity: 1 }}
