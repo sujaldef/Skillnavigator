@@ -44,31 +44,27 @@ const Quiz = () => {
 
     const fetchQuestions = async () => {
       try {
+    
         setLoading(true);
+    
         const prompt = `
-          Generate 30 multiple-choice questions for "${jobRole}".
-          Skills: ${JSON.stringify(skills)}
-          Rules: 4 options, 1 correct answer, unique IDs.
-       Return ONLY valid JSON.
-
-DO NOT include explanations.
-DO NOT include markdown.
-DO NOT include text before or after.
-
-Return strictly:
-
-{
-  "questions": [
+    Generate 30 multiple-choice questions for "${jobRole}".
+    Skills: ${JSON.stringify(skills)}
+    
+    Return ONLY valid JSON:
+    
     {
-      "id": 1,
-      "question": "...",
-      "options": ["A","B","C","D"],
-      "answer": "..."
+      "questions":[
+        {
+          "id":1,
+          "question":"...",
+          "options":["A","B","C","D"],
+          "answer":"..."
+        }
+      ]
     }
-  ]
-}
- `;
-
+    `;
+    
         const response = await fetch("/api/generate", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -76,23 +72,41 @@ Return strictly:
             prompt,
             mode: "quiz"
           })
-          ,
         });
+    
         const data = await response.json();
-
-        if (!data.questions)
-          {
-          console.error("Bad AI response:", data);
-          setQuestions([]);   // prevents crash
+    
+        console.log("QUIZ API RAW:", data);   // ← IMPORTANT DEBUG
+    
+        if (!data.questions || data.questions.length === 0) {
+    
+          console.warn("AI returned empty questions — retrying once...");
+    
+          // retry once (AI sometimes fails first call)
+          const retry = await fetch("/api/generate", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              prompt,
+              mode: "quiz"
+            })
+          });
+    
+          const retryData = await retry.json();
+    
+          console.log("QUIZ RETRY:", retryData);
+    
+          setQuestions(retryData.questions || []);
+    
           return;
         }
-        
+    
         setQuestions(data.questions);
-
-        
-      
+    
       } catch (error) {
-        console.error("Error fetching questions:", error);
+    
+        console.error("Quiz fetch failed:", error);
+    
       } finally {
         setLoading(false);
       }
