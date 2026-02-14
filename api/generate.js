@@ -6,16 +6,11 @@ export default async function handler(req, res) {
   
     try {
   
-      const { prompt } = req.body || {};
+      const { prompt, mode } = req.body || {};
   
-      if (!prompt || typeof prompt !== "string") {
-        return res.status(400).json({ error: "Invalid prompt" });
+      if (!prompt) {
+        return res.status(400).json({ error: "Missing prompt" });
       }
-  
-      // Detect if quiz request (expects JSON)
-      const wantsJSON =
-        prompt.includes('"questions"') ||
-        prompt.includes("Return ONLY valid JSON");
   
       const response = await fetch(
         "https://api.groq.com/openai/v1/chat/completions",
@@ -36,28 +31,23 @@ export default async function handler(req, res) {
       const data = await response.json();
       const text = data?.choices?.[0]?.message?.content || "";
   
-      // QUIZ → parse JSON safely
-      if (wantsJSON) {
+      // QUIZ MODE → parse JSON
+      if (mode === "quiz") {
+  
         const match = text.match(/\{[\s\S]*\}/);
   
         if (!match) {
-          return res.status(200).json({
-            json: { questions: [] }
-          });
+          return res.status(200).json({ questions: [] });
         }
   
         try {
-          return res.status(200).json({
-            json: JSON.parse(match[0])
-          });
+          return res.status(200).json(JSON.parse(match[0]));
         } catch {
-          return res.status(200).json({
-            json: { questions: [] }
-          });
+          return res.status(200).json({ questions: [] });
         }
       }
   
-      // STUDY / CHAT → return text normally
+      // STUDY / CHAT MODE → return text
       return res.status(200).json({ text });
   
     } catch (e) {

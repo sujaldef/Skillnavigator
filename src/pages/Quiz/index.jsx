@@ -72,17 +72,23 @@ Return strictly:
         const response = await fetch("/api/generate", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ prompt }),
+          body: JSON.stringify({
+            prompt,
+            mode: "quiz"
+          })
+          ,
         });
         const data = await response.json();
 
-        if (!data.json || !data.json.questions) {
+        if (!data.questions)
+          {
           console.error("Bad AI response:", data);
           setQuestions([]);   // prevents crash
           return;
         }
         
-        setQuestions(data.json.questions);
+        setQuestions(data.questions);
+
         
       
       } catch (error) {
