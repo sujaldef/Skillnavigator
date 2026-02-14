@@ -52,7 +52,7 @@ const Quiz = () => {
           Return JSON: { "questions": [{ "id": 1, "question": "...", "options": [], "answer": "..." }] }
         `;
 
-        const response = await fetch("http://localhost:5000/generate", {
+        const response = await fetch("/api/generate", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ prompt }),

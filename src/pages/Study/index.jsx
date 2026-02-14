@@ -158,7 +158,7 @@ const StudyPage = () => {
     };
 
     try {
-      const res = await axios.post("http://localhost:5000/generate", { prompt: prompts[tab] });
+      const res = await axios.post("/api/generate", { prompt: prompts[tab] });
       setStudyMaterial(res.data.text || "No content generated. Try again.");
     } catch (error) {
       console.error(error);
@@ -192,7 +192,7 @@ const StudyPage = () => {
     if (!aiInput.trim()) return;
     setAiLoading(true);
     try {
-        const res = await axios.post("http://localhost:5000/generate", { prompt: aiInput });
+        const res = await axios.post("/api/generate", { prompt: aiInput });
         setAiResponse(res.data.text);
     } catch (e) {
         setAiResponse("AI is currently offline. Please try again later.");

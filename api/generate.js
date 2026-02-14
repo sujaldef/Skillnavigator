@@ -1,15 +1,14 @@
-import express from "express";
-import cors from "cors";
 import dotenv from "dotenv";
-
 dotenv.config();
 
-const app = express();
-app.use(cors());
-app.use(express.json());
+export default async function handler(req, res) {
 
-app.post("/generate", async (req, res) => {
+  if (req.method !== "POST") {
+    return res.status(405).json({ error: "Method not allowed" });
+  }
+
   try {
+
     const { prompt } = req.body;
 
     if (!prompt || typeof prompt !== "string") {
@@ -34,24 +33,11 @@ app.post("/generate", async (req, res) => {
 
     const data = await response.json();
 
-    console.log("🔍 Groq raw response:", JSON.stringify(data, null, 2));
-    
-    if (!data.choices || !data.choices.length) {
-      return res.status(500).json({
-        error: "Groq returned no choices",
-        raw: data
-      });
-    }
-     {/* */}
-    res.json({ text: data.choices[0].message.content });
-    
+    res.status(200).json({
+      text: data.choices?.[0]?.message?.content ?? "No response"
+    });
 
   } catch (e) {
-    console.error("🔥 Groq error:", e);
     res.status(500).json({ error: e.message });
   }
-});
-
-app.listen(5000, () =>
-  console.log("✅ Proxy running on http://localhost:5000")
-);
+}
