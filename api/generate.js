@@ -1,5 +1,3 @@
-import dotenv from "dotenv";
-dotenv.config();
 
 export default async function handler(req, res) {
 
@@ -9,7 +7,8 @@ export default async function handler(req, res) {
 
   try {
 
-    const { prompt } = req.body;
+    const { prompt } = req.body || {};
+
 
     if (!prompt || typeof prompt !== "string") {
       return res.status(400).json({ error: "Invalid prompt" });
