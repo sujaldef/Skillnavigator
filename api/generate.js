@@ -25,7 +25,8 @@ export default async function handler(req, res) {
         body: JSON.stringify({
           model: "llama-3.1-8b-instant",
           messages: [{ role: "user", content: prompt }],
-          temperature: 0.3
+          temperature: 0.3,
+          response_format: { type: "json_object" }
         })
       }
     );
@@ -45,9 +46,19 @@ export default async function handler(req, res) {
       }
       
     
-    return res.status(200).json({
-      json: JSON.parse(match[0])
-    });
+      let parsed;
+
+      try {
+        parsed = JSON.parse(match[0]);
+      } catch {
+        return res.status(200).json({
+          json: { questions: [] },
+          warning: "AI JSON parse failed"
+        });
+      }
+      
+      return res.status(200).json({ json: parsed });
+      
     
 
   } catch (e) {
