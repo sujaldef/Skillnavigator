@@ -38,8 +38,12 @@ export default async function handler(req, res) {
     const match = text.match(/\{[\s\S]*\}/);
     
     if (!match) {
-      return res.status(500).json({ error: "No JSON returned from AI" });
-    }
+        return res.status(200).json({
+          json: { questions: [] },
+          warning: "AI returned invalid JSON"
+        });
+      }
+      
     
     return res.status(200).json({
       json: JSON.parse(match[0])

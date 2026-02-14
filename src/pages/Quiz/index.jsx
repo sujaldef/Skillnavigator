@@ -74,10 +74,16 @@ Return strictly:
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ prompt }),
         });
-
         const data = await response.json();
-        setQuestions(data.json.questions || []);
 
+        if (!data.json || !data.json.questions) {
+          console.error("Bad AI response:", data);
+          setQuestions([]);   // prevents crash
+          return;
+        }
+        
+        setQuestions(data.json.questions);
+        
       
       } catch (error) {
         console.error("Error fetching questions:", error);
