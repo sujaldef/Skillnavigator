@@ -44,9 +44,9 @@ const Quiz = () => {
 
     const fetchQuestions = async () => {
       try {
-    
+
         setLoading(true);
-    
+
         const prompt = `
     Generate 30 multiple-choice questions for "${jobRole}".
     Skills: ${JSON.stringify(skills)}
@@ -64,8 +64,8 @@ const Quiz = () => {
       ]
     }
     `;
-    
-        const response = await fetch("/api/generate", {
+
+        const response = await fetch("https://skillnavigator-backend.onrender.com/api/generate", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
@@ -73,17 +73,17 @@ const Quiz = () => {
             mode: "quiz"
           })
         });
-    
+
         const data = await response.json();
-    
+
         console.log("QUIZ API RAW:", data);   // ← IMPORTANT DEBUG
-    
+
         if (!data.questions || data.questions.length === 0) {
-    
+
           console.warn("AI returned empty questions — retrying once...");
-    
+
           // retry once (AI sometimes fails first call)
-          const retry = await fetch("/api/generate", {
+          const retry = await fetch("https://skillnavigator-backend.onrender.com/api/generate", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
@@ -91,22 +91,22 @@ const Quiz = () => {
               mode: "quiz"
             })
           });
-    
+
           const retryData = await retry.json();
-    
+
           console.log("QUIZ RETRY:", retryData);
-    
+
           setQuestions(retryData.questions || []);
-    
+
           return;
         }
-    
+
         setQuestions(data.questions);
-    
+
       } catch (error) {
-    
+
         console.error("Quiz fetch failed:", error);
-    
+
       } finally {
         setLoading(false);
       }
