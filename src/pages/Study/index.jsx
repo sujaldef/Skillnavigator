@@ -194,21 +194,28 @@ const StudyPage = () => {
   const handleAISubmit = async (e) => {
     e.preventDefault();
     if (!aiInput.trim()) return;
+  
     setAiLoading(true);
+  
     try {
-      axios.post("https://skillnavigator-backend.onrender.com/api/generate", {
-        prompt: aiInput,
-        mode: "study"
-      });
-
+      const res = await axios.post(
+        "https://skillnavigator-backend.onrender.com/api/generate",
+        {
+          prompt: aiInput,
+          mode: "study"
+        }
+      );
+  
       setAiResponse(res.data.text);
+  
     } catch (e) {
+      console.error(e);
       setAiResponse("AI is currently offline. Please try again later.");
     } finally {
       setAiLoading(false);
     }
   };
-
+  
   // --- Render ---
   return (
     <div className="flex flex-col h-screen bg-[#0B1221] text-white font-sans overflow-hidden">
