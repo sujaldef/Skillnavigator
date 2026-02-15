@@ -63,7 +63,8 @@ const AIChatDrawer = ({ isOpen, onClose, input, setInput, response, loading, onS
                   <BouncingBall />
                   <p className="mt-4 text-sm font-mono">Analyzing Request...</p>
                 </div>
-              ) : response ? (
+            ) : response !== "" ? (
+
                 <div className="prose prose-invert prose-p:text-gray-300 prose-headings:text-white max-w-none">
                   <ReactMarkdown rehypePlugins={[rehypeRaw]}>{response}</ReactMarkdown>
                 </div>
@@ -194,20 +195,23 @@ const StudyPage = () => {
   const handleAISubmit = async (e) => {
     e.preventDefault();
     if (!aiInput.trim()) return;
-  
+
     setAiLoading(true);
-  
+
     try {
       const res = await axios.post(
         "https://skillnavigator-backend.onrender.com/api/generate",
         {
           prompt: aiInput,
           mode: "study"
-        }
+        },
+        { timeout: 60000 }   // ← ADD THIS
       );
-  
-      setAiResponse(res.data.text);
-  
+      
+      console.log("AI RESPONSE:", res.data);   // ADD THIS
+      setAiResponse(res.data.text || "No response from AI");
+      setAiInput("");   // optional but nice UX
+      
     } catch (e) {
       console.error(e);
       setAiResponse("AI is currently offline. Please try again later.");
