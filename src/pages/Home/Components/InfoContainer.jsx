@@ -6,51 +6,53 @@ const InfoContainer = () => {
   const features = [
     {
       title: "Skill Assessment",
-      desc: "Comprehensive testing to benchmark your current level.",
-      icon: <FaUserCheck size={22} />,
+      desc: "Comprehensive testing to benchmark your level.",
+      icon: <FaUserCheck size={18} />, // Smaller Icon
       colSpan: "col-span-1 md:col-span-2",
     },
     {
       title: "Smart Segmentation",
-      desc: "We categorize your profile instantly based on results.",
-      icon: <FaLayerGroup size={22} />,
+      desc: "We categorize your profile instantly.",
+      icon: <FaLayerGroup size={18} />,
       colSpan: "col-span-1",
     },
     {
       title: "Custom Roadmaps",
-      desc: "Tailored PDFs, YouTube playlists, and practice sets.",
-      icon: <FaRoad size={22} />,
-      highlight: true, // Special flag for the green card
+      desc: "Tailored PDFs, YouTube playlists, & practice sets.",
+      icon: <FaRoad size={18} />,
+      highlight: true,
       colSpan: "col-span-1",
     },
     {
       title: "Progress Tracking",
-      desc: "Visualize growth with detailed analytics and milestones.",
-      icon: <FaChartLine size={22} />,
+      desc: "Visualize growth with detailed analytics.",
+      icon: <FaChartLine size={18} />,
       colSpan: "col-span-1 md:col-span-2",
     },
   ];
 
   return (
-    <div className="w-full py-24 px-6 bg-[#1A2A44]">
-      <div className="max-w-5xl mx-auto">
+    // Reduced outer padding py-16
+    <div className="w-full py-16 px-6 bg-[#1A2A44]">
+      {/* Reduced max-w to 4xl (approx 75%) */}
+      <div className="max-w-4xl mx-auto">
         
         {/* Header */}
-        <div className="flex flex-col md:flex-row justify-between items-end mb-16 gap-6">
-          <div className="max-w-xl">
-            <h2 className="text-3xl md:text-5xl font-bold text-white mb-4">
+        <div className="flex flex-col md:flex-row justify-between items-end mb-10 gap-4">
+          <div className="max-w-lg">
+            {/* Smaller fonts */}
+            <h2 className="text-2xl md:text-4xl font-bold text-white mb-2">
               System Capabilities
             </h2>
-            <p className="text-gray-400 text-lg">
-              Engineered to take you from beginner to job-ready without the friction.
+            <p className="text-gray-400 text-base">
+              Engineered to take you from beginner to job-ready.
             </p>
           </div>
-          {/* Decorative Line */}
-          <div className="hidden md:block h-[1px] flex-grow bg-gradient-to-r from-[#2E4057] to-transparent mb-4 ml-8" />
+          <div className="hidden md:block h-[1px] flex-grow bg-gradient-to-r from-[#2E4057] to-transparent mb-3 ml-6" />
         </div>
 
-        {/* Bento Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        {/* Bento Grid - Reduced gap */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           {features.map((item, index) => (
             <BentoCard key={index} item={item} index={index} />
           ))}
@@ -60,7 +62,6 @@ const InfoContainer = () => {
   );
 };
 
-// Extracted Card Component for cleaner code
 const BentoCard = ({ item, index }) => {
   const isHighlight = item.highlight;
 
@@ -70,48 +71,44 @@ const BentoCard = ({ item, index }) => {
       whileInView={{ opacity: 1, y: 0 }}
       transition={{ delay: index * 0.1, duration: 0.5 }}
       viewport={{ once: true }}
+      // Reduced padding p-6, rounded corners reduced slightly
       className={`
-        ${item.colSpan} relative rounded-[32px] p-8 overflow-hidden group transition-all duration-300
+        ${item.colSpan} relative rounded-[24px] p-6 overflow-hidden group transition-all duration-300
         ${isHighlight ? 'bg-[#00FF88]' : 'bg-[#20314d] hover:bg-[#253a59]'}
       `}
     >
-      {/* 1. Top Border Highlight (The "Light Catch" effect) */}
       {!isHighlight && (
         <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-white/20 to-transparent opacity-50" />
       )}
 
-      {/* 2. Content Wrapper */}
       <div className="relative z-10 flex flex-col h-full justify-between">
-        
-        {/* Header Part */}
         <div>
+          {/* Smaller Icon box */}
           <div className={`
-            w-12 h-12 rounded-2xl flex items-center justify-center mb-6 text-xl shadow-lg transition-transform group-hover:scale-110
+            w-10 h-10 rounded-xl flex items-center justify-center mb-4 text-lg shadow-lg transition-transform group-hover:scale-110
             ${isHighlight ? 'bg-[#1A2A44] text-[#00FF88]' : 'bg-[#1A2A44] text-white border border-[#2E4057]'}
           `}>
             {item.icon}
           </div>
 
-          <h3 className={`text-2xl font-bold mb-3 ${isHighlight ? 'text-[#1A2A44]' : 'text-white'}`}>
+          <h3 className={`text-xl font-bold mb-2 ${isHighlight ? 'text-[#1A2A44]' : 'text-white'}`}>
             {item.title}
           </h3>
           
-          <p className={`text-sm leading-relaxed ${isHighlight ? 'text-[#1A2A44]/80 font-medium' : 'text-gray-400'}`}>
+          <p className={`text-xs leading-relaxed ${isHighlight ? 'text-[#1A2A44]/80 font-medium' : 'text-gray-400'}`}>
             {item.desc}
           </p>
         </div>
 
-        {/* Footer Part (Number & Arrow) */}
-        <div className="flex justify-between items-end mt-8">
-           <span className={`text-4xl font-bold opacity-10 ${isHighlight ? 'text-black' : 'text-white'}`}>
+        <div className="flex justify-between items-end mt-6">
+           <span className={`text-3xl font-bold opacity-10 ${isHighlight ? 'text-black' : 'text-white'}`}>
              0{index + 1}
            </span>
            
-           {/* Arrow icon that  appears on hover */}
            <motion.div 
              initial={{ x: -10, opacity: 0 }}
              whileHover={{ x: 0, opacity: 1 }}
-             className={`text-xl ${isHighlight ? 'text-[#1A2A44]' : 'text-[#00FF88]'}`}
+             className={`text-lg ${isHighlight ? 'text-[#1A2A44]' : 'text-[#00FF88]'}`}
            >
              →
            </motion.div>
