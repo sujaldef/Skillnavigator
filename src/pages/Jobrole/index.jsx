@@ -611,8 +611,13 @@ const JobRole = () => {
         <Popup
           show={state.showPopup1}
           onClose={closePopup1}
-          title="No Level Selected"
-          message="Please select your skill level to get personalized learning recommendations."
+          title="No Level    Selected"
+
+
+
+
+
+          message="Please     select your skill level to get personalized learning recommendations."
           type="warning"
         />
       </div>

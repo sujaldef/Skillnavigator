@@ -7,13 +7,13 @@ import { FaChartPie, FaTasks } from "react-icons/fa";
 const slugify = (text) =>
   text.toLowerCase().replace(/\s+/g, "-").replace(/[^\w-]+/g, "");
 
-const jobRoles = ["Data Scientist", "Frontend Developer", "Cloud Engineer"];
+const jobRoles = ["Data S  cientist", "Frontend Developer", "Cloud Engineer"];
 
 const Dashboard = () => {
   const [selectedRole, setSelectedRole] = useState(jobRoles[0]);
 
   const dashboardData = {
-    "Data Scientist": {
+    "Data Sc  ientist": {
       progress: 75,
       testPercentage: 82,
       skills: [
@@ -38,7 +38,7 @@ const Dashboard = () => {
       testPercentage: 70,
       skills: [
         { name: "HTML/CSS", progress: 80, testPercentage: 85 },
-        { name: "JavaScript", progress: 60, testPercentage: 65 },
+        { name: "Jav aScript", progress: 60, testPercentage: 65 },
         { name: "React", progress: 55, testPercentage: 60 },
       ],
       recommendations: [
