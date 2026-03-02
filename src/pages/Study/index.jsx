@@ -61,7 +61,7 @@ const AIChatDrawer = ({ isOpen, onClose, input, setInput, response, loading, onS
               {loading ? (
                 <div className="flex flex-col items-center justify-center h-full text-gray-400">
                   <BouncingBall />
-                  <p className="mt-4 text-sm font-mono">Analyzing Request...</p>
+                  <p className="mt-4 text-sm font-mono">Analyzing Request..</p>
                 </div>
             ) : response !== "" ? (
 
