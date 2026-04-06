@@ -251,7 +251,7 @@ const StudyPage = () => {
                   />
                 </div>
 
-                {/* Subtopics  List */}
+                {/* Subtopics List */}
                 <AnimatePresence>
                   {expandedSkills[idx] && (
                     <motion.div
