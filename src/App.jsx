@@ -4,7 +4,7 @@ import Home from './pages/Home/index';
 import JobRole from './pages/Jobrole/index'; // Fixed import path
 import Quiz from './pages/Quiz/index'; // Import Quiz page if needed
 import QuizResult from './pages/QuizResult/index'; // Import QuizResult page
-import Study from './pages/Study/index'; // Import Study page
+import Study from './pages/Study/index'; // Import S tudy page
 import About from './pages/About';
 import Career from './pages/Career';
 import Program from './pages/Program'; // Import Program page if needed
