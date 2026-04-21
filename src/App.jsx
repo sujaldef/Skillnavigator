@@ -7,7 +7,7 @@ import QuizResult from './pages/QuizResult/index'; // Import QuizResult page
 import Study from './pages/Study/index'; // Import S tudy page
 import About from './pages/About';
 import Career from './pages/Career';
-import Program from './pages/Program'; // Import   Program page if needed
+import Program from './pages/Program'; // Import    Program page if needed
 import Dashboard from './pages/Dashboard';
 
 const App = () => {
