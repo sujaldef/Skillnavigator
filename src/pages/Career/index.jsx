@@ -6,7 +6,7 @@ import { FaChartLine, FaLaptopCode } from "react-icons/fa";
 
 const Career = () => {
   return (
-    <div className="min-h-screen bg-[#0B1221] font-sans text-white selection:bg-[#00FF88] selection:text-[#0B1221]">
+    <div className="min-h-screen bg-[#0B1221] font-sans text-white  selection:bg-[#00FF88] selection:text-[#0B1221]">
       <Navbar />
       
       <div className="relative pt-32 pb-20 px-6 md:px-12 max-w-7xl mx-auto">
