@@ -1,16 +1,26 @@
-import React, { useState, useEffect } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
-import { motion, AnimatePresence } from "framer-motion";
-import { FaChevronLeft, FaChevronRight, FaCheckCircle, FaFlag } from "react-icons/fa";
-import Navbar from "../../components/Navbar";
-import QuestionCard from "./Componets/QuestionCard";
-import LoadingAnimation from "./Componets/LoadingAnimation";
-import FinishPopup from "./Componets/FinishPopup";
+import React, { useState, useEffect } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
+import { motion, AnimatePresence } from 'framer-motion';
+import {
+  FaChevronLeft,
+  FaChevronRight,
+  FaCheckCircle,
+  FaFlag,
+} from 'react-icons/fa';
+import { getCachedFetch } from '../../utils/apiCache';
+import Navbar from '../../components/Navbar';
+import QuestionCard from './Componets/QuestionCard';
+import LoadingAnimation from './Componets/LoadingAnimation';
+import FinishPopup from './Componets/FinishPopup';
 
 const Quiz = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { jobRole, level, fieldName } = location.state || { jobRole: "", level: "", fieldName: "" };
+  const { jobRole, level, fieldName } = location.state || {
+    jobRole: '',
+    level: '',
+    fieldName: '',
+  };
 
   const [questions, setQuestions] = useState([]);
   const [skills, setSkills] = useState([]);
@@ -23,15 +33,13 @@ const Quiz = () => {
   useEffect(() => {
     const fetchJobRoleSkills = async () => {
       try {
-        const response = await fetch("/jobroleskills.json");
-        if (!response.ok) throw new Error("Failed to load skills");
-        const data = await response.json();
+        const data = await getCachedFetch('/jobroleskills.json');
         const filteredSkills = data
           .filter((item) => item.jobrole === jobRole)
           .flatMap((item) => item.skills || []);
         setSkills(filteredSkills);
       } catch (error) {
-        console.error("Error fetching skills:", error);
+        console.error('Error fetching skills:', error);
         setLoading(false);
       }
     };
@@ -44,7 +52,6 @@ const Quiz = () => {
 
     const fetchQuestions = async () => {
       try {
-
         setLoading(true);
 
         const prompt = `
@@ -65,36 +72,41 @@ const Quiz = () => {
     }
     `;
 
-        const response = await fetch("https://skillnavigator-backend.onrender.com/api/generate", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            prompt,
-            mode: "quiz"
-          })
-        });
+        const response = await fetch(
+          'https://skillnavigator-backend.onrender.com/api/generate',
+          {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              prompt,
+              mode: 'quiz',
+            }),
+          },
+        );
 
         const data = await response.json();
 
-        console.log("QUIZ API RAW:", data);   // ← IMPORTANT DEBUG
+        console.log('QUIZ API RAW:', data); // ← IMPORTANT DEBUG
 
         if (!data.questions || data.questions.length === 0) {
-
-          console.warn("AI returned empty questions — retrying once...");
+          console.warn('AI returned empty questions — retrying once...');
 
           // retry once (AI sometimes fails first call)
-          const retry = await fetch("https://skillnavigator-backend.onrender.com/api/generate", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              prompt,
-              mode: "quiz"
-            })
-          });
+          const retry = await fetch(
+            'https://skillnavigator-backend.onrender.com/api/generate',
+            {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                prompt,
+                mode: 'quiz',
+              }),
+            },
+          );
 
           const retryData = await retry.json();
 
-          console.log("QUIZ RETRY:", retryData);
+          console.log('QUIZ RETRY:', retryData);
 
           setQuestions(retryData.questions || []);
 
@@ -102,11 +114,8 @@ const Quiz = () => {
         }
 
         setQuestions(data.questions);
-
       } catch (error) {
-
-        console.error("Quiz fetch failed:", error);
-
+        console.error('Quiz fetch failed:', error);
       } finally {
         setLoading(false);
       }
@@ -139,7 +148,7 @@ const Quiz = () => {
       correctAnswer: q.answer,
       isCorrect: answers[q.id] === q.answer,
     }));
-    navigate("/result", { state: { results, jobRole, level, fieldName } });
+    navigate('/result', { state: { results, jobRole, level, fieldName } });
     setShowPopup(false);
   };
 
@@ -151,26 +160,36 @@ const Quiz = () => {
 
       {/* Main Content Area */}
       <div className="flex flex-1 pt-[70px] h-screen overflow-hidden">
-
         {/* Left: Navigation Matrix (Hidden on mobile, usable on desktop) */}
         <div className="hidden lg:flex w-80 bg-[#0F172A] border-r border-[#1E293B] flex-col p-6 overflow-y-auto">
           <div className="mb-6">
             <h2 className="text-xl font-bold text-white mb-1">{jobRole}</h2>
-            <p className="text-[#00FF88] text-sm font-medium uppercase tracking-wider">Exam In Progress</p>
+            <p className="text-[#00FF88] text-sm font-medium uppercase tracking-wider">
+              Exam In Progress
+            </p>
           </div>
 
           <div className="mb-4 text-xs text-gray-400 flex justify-between">
             <span>Progress</span>
-            <span>{Math.round((Object.keys(answers).length / questions.length) * 100)}%</span>
+            <span>
+              {Math.round(
+                (Object.keys(answers).length / questions.length) * 100,
+              )}
+              %
+            </span>
           </div>
           <div className="w-full bg-[#1E293B] h-2 rounded-full mb-8 overflow-hidden">
             <div
               className="h-full bg-[#00FF88] transition-all duration-500"
-              style={{ width: `${(Object.keys(answers).length / questions.length) * 100}%` }}
+              style={{
+                width: `${(Object.keys(answers).length / questions.length) * 100}%`,
+              }}
             />
           </div>
 
-          <h3 className="text-sm text-gray-400 mb-4 font-bold uppercase">Question Matrix</h3>
+          <h3 className="text-sm text-gray-400 mb-4 font-bold uppercase">
+            Question Matrix
+          </h3>
           <div className="grid grid-cols-5 gap-2">
             {questions.map((q, idx) => {
               const isAnswered = answers[q.id] !== undefined;
@@ -181,11 +200,13 @@ const Quiz = () => {
                   onClick={() => setCurrentQIndex(idx)}
                   className={`
                     h-10 rounded-md text-xs font-bold transition-all duration-200 border
-                    ${isActive
-                      ? "bg-[#00FF88] text-[#0B1221] border-[#00FF88] shadow-[0_0_10px_rgba(0,255,136,0.4)] scale-110 z-10"
-                      : isAnswered
-                        ? "bg-[#1A2A44] text-[#00FF88] border-[#00FF88]/30"
-                        : "bg-[#1E293B] text-gray-500 border-transparent hover:bg-[#2A3B4D]"}
+                    ${
+                      isActive
+                        ? 'bg-[#00FF88] text-[#0B1221] border-[#00FF88] shadow-[0_0_10px_rgba(0,255,136,0.4)] scale-110 z-10'
+                        : isAnswered
+                          ? 'bg-[#1A2A44] text-[#00FF88] border-[#00FF88]/30'
+                          : 'bg-[#1E293B] text-gray-500 border-transparent hover:bg-[#2A3B4D]'
+                    }
                   `}
                 >
                   {idx + 1}
@@ -206,16 +227,34 @@ const Quiz = () => {
         <div className="flex-1 relative flex flex-col">
           {/* Top Bar (Mobile Nav + Progress) */}
           <div className="h-16 border-b border-[#1E293B] flex items-center justify-between px-6 lg:px-12 bg-[#0B1221]/95 backdrop-blur z-10">
-            <span className="text-gray-400 text-sm">Question <span className="text-white font-bold text-lg">{currentQIndex + 1}</span> / {questions.length}</span>
+            <span className="text-gray-400 text-sm">
+              Question{' '}
+              <span className="text-white font-bold text-lg">
+                {currentQIndex + 1}
+              </span>{' '}
+              / {questions.length}
+            </span>
             <div className="lg:hidden">
-              <button onClick={() => setShowPopup(true)} className="text-red-500 text-sm font-bold">Finish</button>
+              <button
+                onClick={() => setShowPopup(true)}
+                className="text-red-500 text-sm font-bold"
+              >
+                Finish
+              </button>
             </div>
           </div>
 
           {/* Question Content */}
           <div className="flex-1 overflow-y-auto p-6 lg:p-12 flex items-center justify-center relative">
             {/* Background Grid */}
-            <div className="absolute inset-0 opacity-5" style={{ backgroundImage: 'linear-gradient(#2E4057 1px, transparent 1px), linear-gradient(90deg, #2E4057 1px, transparent 1px)', backgroundSize: '40px 40px' }} />
+            <div
+              className="absolute inset-0 opacity-5"
+              style={{
+                backgroundImage:
+                  'linear-gradient(#2E4057 1px, transparent 1px), linear-gradient(90deg, #2E4057 1px, transparent 1px)',
+                backgroundSize: '40px 40px',
+              }}
+            />
 
             <div className="w-full max-w-3xl relative z-10">
               <AnimatePresence mode="wait">

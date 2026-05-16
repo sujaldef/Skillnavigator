@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, memo } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 
-const Navbar = () => {
+const Navbar = memo(() => {
   const location = useLocation();
   const [scrolled, setScrolled] = useState(false);
 
@@ -17,7 +17,6 @@ const Navbar = () => {
     { name: 'HOME', path: '/' },
     { name: 'CAREER', path: '/career' },
     { name: 'ABOUT', path: '/about' },
-    
   ];
 
   return (
@@ -25,12 +24,17 @@ const Navbar = () => {
       initial={{ y: -100 }}
       animate={{ y: 0 }}
       className={`fixed top-0 w-full z-[1000] transition-all duration-300 ${
-        scrolled ? 'bg-[#182c4d]/90 backdrop-blur-md shadow-lg py-2' : 'bg-transparent py-4'
+        scrolled
+          ? 'bg-[#182c4d]/90 backdrop-blur-md shadow-lg py-2'
+          : 'bg-transparent py-4'
       }`}
     >
       <div className="max-w-7xl mx-auto px-6 flex justify-between items-center">
         {/* Logo */}
-        <Link to="/" className="group flex flex-col font-montserrat font-bold text-2xl">
+        <Link
+          to="/"
+          className="group flex flex-col font-montserrat font-bold text-2xl"
+        >
           <span className="text-white group-hover:text-[#00FF88] transition-colors duration-300">
             SKILL
           </span>
@@ -60,6 +64,8 @@ const Navbar = () => {
       </div>
     </motion.nav>
   );
-};
+});
+
+Navbar.displayName = 'Navbar';
 
 export default Navbar;
