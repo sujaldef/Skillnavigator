@@ -1,12 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import {
-  FaChevronLeft,
-  FaChevronRight,
-  FaCheckCircle,
-  FaFlag,
-} from 'react-icons/fa';
+import { FaChevronLeft, FaChevronRight, FaCheckCircle } from 'react-icons/fa';
 import { getCachedFetch } from '../../utils/apiCache';
 import Navbar from '../../components/Navbar';
 import QuestionCard from './Componets/QuestionCard';
@@ -16,10 +11,11 @@ import FinishPopup from './Componets/FinishPopup';
 const Quiz = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { jobRole, level, fieldName } = location.state || {
+  const { jobRole, level, fieldName, skillName } = location.state || {
     jobRole: '',
     level: '',
     fieldName: '',
+    skillName: '',
   };
 
   const [questions, setQuestions] = useState([]);
@@ -34,17 +30,19 @@ const Quiz = () => {
     const fetchJobRoleSkills = async () => {
       try {
         const data = await getCachedFetch('/jobroleskills.json');
-        const filteredSkills = data
+        let filteredSkills = data
           .filter((item) => item.jobrole === jobRole)
-          .flatMap((item) => item.skills || []);
-        setSkills(filteredSkills);
+          .map((item) => item.skills)
+          .filter(Boolean);
+        if (skillName) filteredSkills = filteredSkills.filter((s) => s === skillName);
+        setSkills([...new Set(filteredSkills)]);
       } catch (error) {
         console.error('Error fetching skills:', error);
         setLoading(false);
       }
     };
     if (jobRole) fetchJobRoleSkills();
-  }, [jobRole]);
+  }, [jobRole, skillName]);
 
   // 2. Fetch Questions (Gemini)
   useEffect(() => {
@@ -54,59 +52,32 @@ const Quiz = () => {
       try {
         setLoading(true);
 
-        const prompt = `
-    Generate 30 multiple-choice questions for "${jobRole}".
-    Skills: ${JSON.stringify(skills)}
-    
-    Return ONLY valid JSON:
-    
-    {
-      "questions":[
-        {
-          "id":1,
-          "question":"...",
-          "options":["A","B","C","D"],
-          "answer":"..."
-        }
-      ]
-    }
-    `;
+        const topics = skills.join(', ');
+        const prompt = `30 MCQs for "${jobRole}"${level ? ` (${level})` : ''}. Topics: ${topics}. JSON only: {"questions":[{"id":1,"question":"","options":["","","",""],"answer":""}]}`;
+        const body = JSON.stringify({ prompt, mode: 'quiz' });
 
         const response = await fetch(
           'https://skillnavigator-backend.onrender.com/api/generate',
           {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              prompt,
-              mode: 'quiz',
-            }),
+            body,
           },
         );
 
         const data = await response.json();
 
-        console.log('QUIZ API RAW:', data); // ← IMPORTANT DEBUG
-
         if (!data.questions || data.questions.length === 0) {
-          console.warn('AI returned empty questions — retrying once...');
-
-          // retry once (AI sometimes fails first call)
           const retry = await fetch(
             'https://skillnavigator-backend.onrender.com/api/generate',
             {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({
-                prompt,
-                mode: 'quiz',
-              }),
+              body,
             },
           );
 
           const retryData = await retry.json();
-
-          console.log('QUIZ RETRY:', retryData);
 
           setQuestions(retryData.questions || []);
 
@@ -121,7 +92,7 @@ const Quiz = () => {
       }
     };
     fetchQuestions();
-  }, [skills, jobRole]);
+  }, [skills, jobRole, level]);
 
   // Handlers
   const handleAnswerSelection = (qId, option) => {
@@ -261,8 +232,6 @@ const Quiz = () => {
                 <QuestionCard
                   key={currentQIndex}
                   question={questions[currentQIndex]}
-                  total={questions.length}
-                  index={currentQIndex}
                   selectedAnswer={answers[questions[currentQIndex]?.id]}
                   onAnswer={handleAnswerSelection}
                 />

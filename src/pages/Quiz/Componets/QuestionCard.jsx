@@ -1,7 +1,7 @@
 import React from "react";
 import { motion } from "framer-motion";
 
-const QuestionCard = ({ question, index, selectedAnswer, onAnswer }) => {
+const QuestionCard = ({ question, selectedAnswer, onAnswer }) => {
   if (!question) return null;
 
   return (
